@@ -285,7 +285,6 @@ def setup_temp_files():
 
 
 def distribute_embeddings(configs, metadata, split_files):
-    """Distributes embeddings to Parquet split files, merging metadata."""
     embeddings_path = configs.embeddings_csv
     proportion_string = configs.split_proportions
     prevent_leakage = configs.prevent_leakage
@@ -309,13 +308,14 @@ def distribute_embeddings(configs, metadata, split_files):
         sample_to_split = dict(zip(metadata["sample_name"], metadata["split"]))
         sample_to_label = dict(zip(metadata["sample_name"], metadata["label"]))
 
-    # Use a dictionary to track if
-    # the file for a given split has been written to before.
     first_write = {split: True for split in split_files}
 
     try:
         first_header_read = True
         for chunk in pd.read_csv(embeddings_path, chunksize=buffer_size):
+            # Modify 'sample_name' to remove part after the last underscore
+            chunk['sample_name'] = chunk['sample_name'].apply(lambda x: x.rsplit('_', 1)[0])
+
             if first_header_read:
                 orig_header = list(chunk.columns)
                 non_sample_columns = [
@@ -336,9 +336,7 @@ def distribute_embeddings(configs, metadata, split_files):
                                     on="sample_name",
                                     how="left")
 
-            # Drop any rows where split or label information is missing.
             chunk = chunk.dropna(subset=["split", "label"])
-            # Save each split to its corresponding temporary file.
             for split in split_files:
                 split_chunk = chunk[chunk["split"] == split]
                 if not split_chunk.empty:
@@ -349,7 +347,6 @@ def distribute_embeddings(configs, metadata, split_files):
                         append=not first_write[split],
                         index=False
                     )
-                    # Mark that we've written data for this split.
                     first_write[split] = False
             del chunk
             gc.collect()
