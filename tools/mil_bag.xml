@@ -40,7 +40,6 @@
         --use_gpu
         #end if
     </command>
-
     <inputs>
         <param name="embeddings_csv" type="data" format="csv" label="Embeddings CSV File" help="CSV file containing embeddings with a 'sample_name' column."/>
         <param name="metadata_csv" type="data" format="csv" label="Metadata CSV File" help="CSV file with metadata containing 'sample_name' and 'label' columns."/>
@@ -68,7 +67,6 @@
         <param name="truncate_bags" type="boolean" truevalue="--truncate_bags" falsevalue="" checked="false" label="Truncate Bags for Balance?" help="If checked, truncates bags to ensure equal counts of positive and negative bags."/>
         <param name="use_gpu" type="boolean" truevalue="--use_gpu" falsevalue="" checked="false" label="Use GPU?" help="If checked, uses GPU for pooling operations (requires compatible hardware and libraries)."/>
     </inputs>
-
     <outputs>
         <data name="output_csv" format="csv" label="Processed Bags CSV"/>
     </outputs>
