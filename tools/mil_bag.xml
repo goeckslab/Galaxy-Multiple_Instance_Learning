@@ -37,7 +37,7 @@
         #if $use_gpu
         --use_gpu
         #end if
-         #if $by_sample != ""
+        #if $by_sample != ""
         --by_sample "$by_sample"
         #end if
     </command>
