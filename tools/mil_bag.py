@@ -1211,16 +1211,15 @@ def truncate_bag(bag_file, split):
 def columns_into_string(bag_file):
     """
     Reads the bag file (Parquet) from the given path, identifies
-    the vector columns
-    (i.e. columns not among 'sample_name', 'bag_label', 'split',
-    and 'bag_size'),
-    concatenates these vector values (as strings) into a single
-    whitespace‐separated string
-    stored in a new column "embeddings", drops the individual vector columns,
-    and writes the modified DataFrame back to the same Parquet file.
+    the vector columns (i.e., columns not among 'sample_name', 'bag_label', 'split',
+    and 'bag_size'), concatenates these vector values (as strings) into a single
+    whitespace-separated string wrapped in double quotes, stored in a new column
+    "embeddings", drops the individual vector columns, and writes the modified
+    DataFrame back to the same Parquet file.
 
     The final output format is:
       "sample_name", "bag_label", "split", "bag_size", "embeddings"
+    where "embeddings" is a string like: "0.1 0.2 0.3"
     """
     logging.info(
         "Converting vector columns into string for bag file: %s",
@@ -1240,12 +1239,11 @@ def columns_into_string(bag_file):
     vector_columns = [col for col in df.columns if col not in non_vector]
     logging.info("Identified vector columns: %s", vector_columns)
 
-    # Create new 'embeddings' column
-    # by converting vector columns to str and joining them
-    # using whitespace as the separator.
+    # Create new 'embeddings' column by converting vector columns to str,
+    # joining them with whitespace, and wrapping the result in double quotes.
     # Use apply() to ensure the result is a Series with one string per row.
     df["embeddings"] = df[vector_columns].astype(str).apply(
-        lambda x: " ".join(x), axis=1
+        lambda x: f"\"{' '.join(x)}\"", axis=1
     )
     # Drop the original vector columns.
     df.drop(columns=vector_columns, inplace=True)
