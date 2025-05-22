@@ -1,7 +1,7 @@
 <tool id="bagging_tool" name="Bagging Embeddings Processor">
     <description>Process CSV files to create bags of embeddings for machine learning</description>
     <requirements>
-        <container type="docker">pull quay.io/goeckslab/milbag:0.1</container>
+        <container type="docker">quay.io/goeckslab/milbag:0.1</container>
     </requirements>
     <command>
         python "$__tool_directory__/ludwig_mil.py"
