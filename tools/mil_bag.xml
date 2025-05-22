@@ -33,10 +33,10 @@
         #if $use_gpu
         --use_gpu
         #end if
-        #if $by_sample != ""
+         #if $by_sample != ""
         --by_sample "$by_sample"
         #end if
-   </command>
+    </command>
     <inputs>
         <param name="embeddings_csv" type="data" format="csv" label="Embeddings CSV File" help="CSV file containing embeddings with a 'sample_name' column."/>
         <param name="metadata_csv" type="data" format="csv" label="Metadata CSV File" help="CSV file with metadata containing 'sample_name' and 'label' columns."/>
