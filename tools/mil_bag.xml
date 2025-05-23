@@ -15,7 +15,7 @@
         --bag_size "$bag_size"
         --pooling_method "$pooling_method"
         --repeats "$repeats"
-        --output_csv "$output_bags.csv"
+        --output_csv "$output_csv"
         #if $dataleak
         --dataleak
         #end if
@@ -69,7 +69,7 @@
         <param name="use_gpu" type="boolean" truevalue="--use_gpu" falsevalue="" checked="false" label="Use GPU?" help="If checked, uses GPU for pooling operations (requires compatible hardware and libraries)."/>
     </inputs>
     <outputs>
-        <data name="output_bags.csv" format="csv" label="Processed Bags CSV"/>
+        <data name="output_csv" format="csv" label="Processed Bags CSV"/>
     </outputs>
     <tests>
         <test>
