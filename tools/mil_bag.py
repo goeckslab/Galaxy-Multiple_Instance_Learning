@@ -1,4 +1,5 @@
-""" A script for creating bags of instances from embeddings
+"""
+A script for creating bags of instances from embeddings
 and metadata for Multiple Instance Learning (MIL) tasks.
 
 Processes embedding and metadata CSV files to generate
@@ -69,7 +70,7 @@ def parse_bag_size(bag_size_str):
     try:
         if '-' in bag_size_str:
             start, end = map(int, bag_size_str.split('-'))
-            return [start, end]
+            return list(range(start, end + 1))
         return [int(bag_size_str)]
     except ValueError:
         logging.error("Invalid bag_size format: %s", bag_size_str)
@@ -404,7 +405,7 @@ def aggregate_embeddings(embeddings, pooling_method, use_gpu=False):
     return result
 
 
-def bag_by_sample(df, split, bag_file, config, batch_size=100,
+def bag_by_sample(df, split, bag_file, config, batch_size=1000,
                   fixed_target_bags=None):
     """
     Processes the provided DataFrame by grouping rows by sample,
@@ -1243,7 +1244,7 @@ def columns_into_string(bag_file):
     # joining them with whitespace, and wrapping the result in double quotes.
     # Use apply() to ensure the result is a Series with one string per row.
     df["embeddings"] = df[vector_columns].astype(str).apply(
-        lambda x: f"\"{' '.join(x)}\"", axis=1
+        lambda x: " ".join(x), axis=1
     )
     # Drop the original vector columns.
     df.drop(columns=vector_columns, inplace=True)
